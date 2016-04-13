@@ -25,13 +25,13 @@ gradlew.bat build
 After you have run the gradle build, a compressed file will be added to build/distributions.
 
 In Windows:
-# Unzip build/distributions/cogs-java-example-app-(version).zip
-# Double click on cogs-java-example-app-(version)/bin/cogs-java-example-app.bat
+1. Unzip build/distributions/cogs-java-example-app-(version).zip
+2. Double click on cogs-java-example-app-(version)/bin/cogs-java-example-app.bat
 
 Under OSX or Linux: 
-# cd build/distributions
-# tar xvf cogs-java-example-app-1.0.15.tar
-# cogs-java-example-app-(version)/bin/cogs-java-example-app
+1. cd build/distributions
+2. tar xvf cogs-java-example-app-1.0.15.tar
+3. cogs-java-example-app-(version)/bin/cogs-java-example-app
 
 ## IntelliJ IDEA
 
