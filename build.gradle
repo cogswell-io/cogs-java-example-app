@@ -1,0 +1,116 @@
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+
+group 'io.cogswell'
+version '1.0.1'
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'maven'
+
+mainClassName = "com.gambit.sdk.example.GambitExample"
+
+jar {
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF'
+
+    manifest {
+        attributes  'Main-Class': 'com.gambit.sdk.example.GambitExample'
+                    //'Class-Path': configurations.runtime.files.collect { "lib/$it.name" }.join(' ')
+    }
+}
+
+sourceCompatibility = 1.8
+
+buildscript {
+	repositories {
+		jcenter()
+	}
+}
+repositories {
+    jcenter()
+    mavenLocal()
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'images'
+        }
+    }
+}
+dependencies {
+    compile 'io.cogswell:cogs-java-client-sdk:1.0.+'
+    compile 'io.cogswell:cogs-java-tools-sdk:1.0.+'
+    compile 'org.json:json:20150729'
+    compile 'com.intellij:forms_rt:7.0.3'
+    compile 'net.java.balloontip:balloontip:1.2.4.1'
+    compile 'org.swinglabs.swingx:swingx-all:1.6.4'
+}
+
+task copyReadme {
+    outputs.file new File("README.txt")
+    doLast {
+        copy {
+            from "README.txt"
+            into "$buildDir"
+        }
+    }
+}
+
+applicationDistribution.from(copyReadme) {
+    into ""
+}
+
+task copyLicense {
+    outputs.file new File("LICENSE.txt")
+    doLast {
+        copy {
+            from "LICENSE.txt"
+            into "$buildDir"
+        }
+    }
+}
+
+applicationDistribution.from(copyLicense) {
+    into ""
+}
+
+task copyNotice {
+    outputs.file new File("NOTICE.txt")
+    doLast {
+        copy {
+            from "NOTICE.txt"
+            into "$buildDir"
+        }
+    }
+}
+
+// Reference: http://www.tikalk.com/devops/increment-version-numbers-in-gradle/
+task buildnumberplusone {
+    Properties props = new Properties()
+    File propsFile = new File('src/main/resources/version.properties')
+    props.load(propsFile.newDataInputStream())
+    Integer nextbuildnum = ( ((props.getProperty('artifactBuildNumber')) as BigDecimal) + 1 )
+    props.setProperty('artifactBuildNumber', nextbuildnum.toString())
+
+    version = props.getProperty('artifactMajorVersion') + "." + nextbuildnum
+
+    def cmd = "git rev-parse --short HEAD"
+    def proc = cmd.execute()
+    def gitHash = proc.text.trim()
+
+    String buildTime = String.format("%tFT%<tRZ",
+            Calendar.getInstance(TimeZone.getTimeZone("Z")));
+
+    props.setProperty('gitHash', gitHash)
+    props.setProperty('buildTime', buildTime)
+
+    props.store(propsFile.newWriter(), null)
+}
+
+applicationDistribution.from(copyNotice) {
+    into ""
+}
