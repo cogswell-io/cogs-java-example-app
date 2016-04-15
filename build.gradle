@@ -31,7 +31,6 @@ buildscript {
 }
 repositories {
     jcenter()
-    mavenLocal()
 }
 
 sourceSets {
