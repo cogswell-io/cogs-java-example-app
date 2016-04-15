@@ -93,10 +93,9 @@ task buildnumberplusone {
     Properties props = new Properties()
     File propsFile = new File('src/main/resources/version.properties')
     props.load(propsFile.newDataInputStream())
-    Integer nextbuildnum = ( ((props.getProperty('artifactBuildNumber')) as BigDecimal) + 1 )
-    props.setProperty('artifactBuildNumber', nextbuildnum.toString())
+    props.setProperty('artifactBuildNumber', System.getenv('BUILD_NUMBER'))
 
-    version = props.getProperty('artifactMajorVersion') + "." + nextbuildnum
+    version = props.getProperty('artifactMajorVersion') + "." + System.getenv('BUILD_NUMBER')
 
     def cmd = "git rev-parse --short HEAD"
     def proc = cmd.execute()
