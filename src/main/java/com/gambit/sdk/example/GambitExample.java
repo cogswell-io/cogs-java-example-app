@@ -124,7 +124,9 @@ public class GambitExample implements GambitPushService.GambitMessageListener {
         }
     }
 
-    public static final String API_HOSTNAME = "api.cogswell.io";
+    public static final String API_HOSTNAME = ((System.getenv("COGS_BASE_API_URL") == null) ? "api.cogswell.io" : System.getenv("COGS_BASE_API_URL"));
+
+    protected static final String NON_DEFAULT_URL_TITLE = ((System.getenv("COGS_BASE_API_URL") == null) ? "" : "[" + System.getenv("COGS_BASE_API_URL") + "] ");
 
     public static final Logger getLogger() {
         //LogManager.getLogManager()
@@ -280,7 +282,7 @@ public class GambitExample implements GambitPushService.GambitMessageListener {
         Thread.setDefaultUncaughtExceptionHandler(new LoggingExceptionHandler());
         System.setProperty("sun.awt.exception.handler", LoggingExceptionHandler.class.getName());
 
-        JFrame frame = new JFrame("Cogs Demo");
+        JFrame frame = new JFrame(NON_DEFAULT_URL_TITLE + "Cogs Demo");
 
         GambitExample app = new GambitExample();
 
