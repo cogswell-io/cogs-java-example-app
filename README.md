@@ -2,11 +2,7 @@
 This is the Cogswell test tool written in Java.
 
 ## To Build
-You must already have the tools and sdk project installed using gradle.
-* https://github.com/cogswell-io/cogs-java-client-sdk
-* https://github.com/cogswell-io/cogs-java-tools-sdk
-
-This project uses gradle.
+This project uses gradle: everything you need to run gradle will be automatically downloaded the first time you run gradlew.
 
 Linux:
 ```
@@ -18,6 +14,16 @@ Windows:
 ```
 cd your/project/root/path
 gradlew.bat build
+```
+
+If you do not use gradle, or are also updating the tools or sdk, you'll need to reference these projects:
+* https://github.com/cogswell-io/cogs-java-client-sdk
+* https://github.com/cogswell-io/cogs-java-tools-sdk
+
+## Specifying a custom version number
+You may specify a build number using the environment variable BUILD_NUMBER, otherwise a default dev buil number will be used.  For example, in OSX or Linux:
+```
+BUILD_NUMBER=12345 ./gradlew build
 ```
 
 ## To Launch:

@@ -90,12 +90,13 @@ task copyNotice {
 
 // Reference: http://www.tikalk.com/devops/increment-version-numbers-in-gradle/
 task buildnumberplusone {
+    def buildNumber = System.getenv('BUILD_NUMBER')?System.getenv('BUILD_NUMBER'):"development-build"
     Properties props = new Properties()
     File propsFile = new File('src/main/resources/version.properties')
     props.load(propsFile.newDataInputStream())
-    props.setProperty('artifactBuildNumber', System.getenv('BUILD_NUMBER'))
+    props.setProperty('artifactBuildNumber', buildNumber)
 
-    version = props.getProperty('artifactMajorVersion') + "." + System.getenv('BUILD_NUMBER')
+    version = props.getProperty('artifactMajorVersion') + "." + buildNumber
 
     def cmd = "git rev-parse --short HEAD"
     def proc = cmd.execute()
