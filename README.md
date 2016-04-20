@@ -2,17 +2,15 @@
 This is the Cogswell test tool written in Java.
 
 ## To Build
-This project uses gradle: everything you need to run gradle will be automatically downloaded the first time you run gradlew.
+This project uses gradle: everything you need to run gradle will be automatically downloaded the first time you run gradlew.  NOTE: You'll need to change directory to the directory you downloaded the project to before you launch gradlew from the command line.
 
 Linux:
 ```
-cd your/project/root/path
 ./gradlew build
 ```
 
 Windows:
 ```
-cd your/project/root/path
 gradlew.bat build
 ```
 
