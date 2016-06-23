@@ -19,6 +19,13 @@ public class GambitAttributeTableCellEditorDateTime extends AbstractCellEditor i
     protected JXDateTimePicker component;
 
     /**
+     * Date Formats
+     */
+    private String humanReadableFormat = "EEE MMM dd, YYYY HH:mm:ssZZ";
+    private String isoFormat = "yyyy-MM-dd'T'HH:mm:ssZ";
+    private TimeZone tz = TimeZone.getTimeZone("UTC");
+
+    /**
      * Spawn a date time picker on demand
      * @param table the table
      * @param value the value
@@ -28,28 +35,14 @@ public class GambitAttributeTableCellEditorDateTime extends AbstractCellEditor i
      * @return A swing component that will be placed in the requested table column
      */
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int rowIndex, int vColIndex) {
-
         component = new JXDateTimePicker();
-
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
-        df.setTimeZone(tz);
-
-        component.setFormats(df);
-        component.setTimeFormat(DateFormat.getTimeInstance(DateFormat.MEDIUM));
+        component.setFormats(makeDateFormat(isoFormat));
 
         Date date = null;
 
         if (value != null && !value.equals("")) {
-
-            try {
-                date = df.parse(value.toString());
-            } catch (ParseException e) {
-                Logger.getLogger(GambitAttributeTableCellEditorDateTime.class.getName())
-                        .log(Level.WARNING, "Error parsing date from the date picker: " + e.getMessage(), e);
-            }
-        }
-        else {
+            date = parseDate(value, humanReadableFormat);
+        } else {
             date = new Date();
         }
 
@@ -60,24 +53,39 @@ public class GambitAttributeTableCellEditorDateTime extends AbstractCellEditor i
         return component;
     }
 
+
     /**
      * Obtain the result from the component and display it as text after the editing is finally over
      * @return date time string in ISO-8601 format
      */
     public Object getCellEditorValue() {
-
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
-        df.setTimeZone(tz);
-
         Date date = component.getDate();
 
-        String date_iso = "";
-
         if (date != null) {
-            date_iso = df.format(date);
+            return formatDate(date, humanReadableFormat);
         }
+        return "";
+    }
 
-        return date_iso;
+    /**
+     * Helper Methods
+     */
+    private DateFormat makeDateFormat(String formatString) {
+        return new SimpleDateFormat(formatString);
+    }
+
+    private String formatDate(Object date, String formatString) {
+        return makeDateFormat(formatString).format(date);
+    }
+
+    private Date parseDate(Object date, String formatString) {
+        try {
+            return makeDateFormat(formatString)
+                    .parse(date.toString());
+        } catch (ParseException e) {
+            Logger.getLogger(GambitAttributeTableCellEditorDateTime.class.getName())
+                    .log(Level.WARNING, "Error parsing date from the date picker: " + e.getMessage(), e);
+        }
+        return null;
     }
 }
