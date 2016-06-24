@@ -3,13 +3,7 @@ package com.gambit.sdk.example.table.event;
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
 import java.awt.*;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class GambitAttributeTableCellEditorDateTime extends AbstractCellEditor implements TableCellEditor {
 
@@ -17,13 +11,6 @@ public class GambitAttributeTableCellEditorDateTime extends AbstractCellEditor i
      * The datetime picker component
      */
     protected JXDateTimePicker component;
-
-    /**
-     * Date Formats
-     */
-    private String humanReadableFormat = "EEE MMM dd, YYYY HH:mm:ssZZ";
-    private String isoFormat = "yyyy-MM-dd'T'HH:mm:ssZ";
-    private TimeZone tz = TimeZone.getTimeZone("UTC");
 
     /**
      * Spawn a date time picker on demand
@@ -36,12 +23,12 @@ public class GambitAttributeTableCellEditorDateTime extends AbstractCellEditor i
      */
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int rowIndex, int vColIndex) {
         component = new JXDateTimePicker();
-        component.setFormats(makeDateFormat(isoFormat));
+        component.setFormats(GambitDateUtils.makeDateFormat(GambitDateUtils.ISO_FORMAT));
 
         Date date = null;
 
         if (value != null && !value.equals("")) {
-            date = parseDate(value, humanReadableFormat);
+            date = GambitDateUtils.parseDate(value, GambitDateUtils.HUMAN_READABLE_FORMAT);
         } else {
             date = new Date();
         }
@@ -62,30 +49,10 @@ public class GambitAttributeTableCellEditorDateTime extends AbstractCellEditor i
         Date date = component.getDate();
 
         if (date != null) {
-            return formatDate(date, humanReadableFormat);
+            return GambitDateUtils.formatDate(date, GambitDateUtils.HUMAN_READABLE_FORMAT);
         }
         return "";
     }
 
-    /**
-     * Helper Methods
-     */
-    private DateFormat makeDateFormat(String formatString) {
-        return new SimpleDateFormat(formatString);
-    }
 
-    private String formatDate(Object date, String formatString) {
-        return makeDateFormat(formatString).format(date);
-    }
-
-    private Date parseDate(Object date, String formatString) {
-        try {
-            return makeDateFormat(formatString)
-                    .parse(date.toString());
-        } catch (ParseException e) {
-            Logger.getLogger(GambitAttributeTableCellEditorDateTime.class.getName())
-                    .log(Level.WARNING, "Error parsing date from the date picker: " + e.getMessage(), e);
-        }
-        return null;
-    }
 }
