@@ -1,6 +1,8 @@
 package com.gambit.sdk.example.table.event;
 
 import org.json.JSONObject;
+
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -215,6 +217,9 @@ public class GambitAttribute implements Comparable<GambitAttribute> {
                     return Integer.parseInt(getValue());
                 } else if (getDataType().equals(TYPE_NUM)) {
                     return Double.parseDouble(getValue());
+                } else if (getDataType().equals(TYPE_DATE)) {
+                    Date date = GambitDateUtils.parseDate(getValue(), GambitDateUtils.HUMAN_READABLE_FORMAT);
+                    return GambitDateUtils.formatDate(date, GambitDateUtils.ISO_FORMAT);
                 } else {
                     return getValue();
                 }
