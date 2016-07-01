@@ -5,7 +5,7 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 group 'io.cogswell'
-version '1.0.1'
+version '1.0.2'
 
 apply plugin: 'java'
 apply plugin: 'application'
@@ -42,7 +42,7 @@ sourceSets {
     }
 }
 dependencies {
-    compile 'io.cogswell:cogs-java-client-sdk:1.0.+'
+    compile 'io.cogswell:cogs-java-client-sdk:1.1.+'
     compile 'io.cogswell:cogs-java-tools-sdk:1.0.+'
     compile 'org.json:json:20150729'
     compile 'com.intellij:forms_rt:7.0.3'

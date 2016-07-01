@@ -32,6 +32,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.xml.bind.DatatypeConverter;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -814,19 +815,9 @@ public class GambitExample implements GambitPushService.GambitMessageListener {
                         builder.setNamespace(sendEventNamespace);
                         builder.setAttributes(attributes);
 
-                        builder.setForwardAsMessage(true);
-
-                        String timestamp = null;
                         if (sendEventCheckCurrentTimestamp.isSelected()) {
-                            TimeZone tz = TimeZone.getTimeZone("UTC");
-                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
-                            df.setTimeZone(tz);
-                            timestamp = df.format(new Date());
-                        } else {
-                            timestamp = sendEventInputTimestamp.getText();
+                            builder.setTimestamp(DatatypeConverter.printDateTime(new GregorianCalendar()));
                         }
-
-                        builder.setTimestamp(timestamp);
 
                         builder.setForwardAsMessage(true);
 
